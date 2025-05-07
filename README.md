@@ -4,7 +4,7 @@ This illustrates how a `SecretStore` in Kubernetes can be dynamically created vi
 
 _Important note: this is a POC, not Production ready._
 
-First, you need to follow the instructions for the setup of your Container Runner here.
+First, you need to follow the instructions for the setup of your Container Runner [here](https://developer.humanitec.com/integration-and-extensions/drivers/generic-drivers/container-runner/).
 
 This setup is assuming that you have the Container Runner setup in the same cluster where your Workloads are deployed (and where the Humanitec Operator is, to access the `SecretStore` that you want to dynamically create).
 
@@ -54,6 +54,8 @@ When you will deploy your first deployment in a specific App/Env, the associated
 
 The only caveat at this stage is that if your Developers are referring to Shared Values&Secrets from their Score file, you will have this error:
 ```none
-
+Humanitec Operator error
+secret mapping status: False. Reason: MappingError. Message: resolving secrets: creating secret store client for test-res-type-development: getting SecretStore: SecretStore.humanitec.io "test-res-type-development" not found
 ```
+
 At this stage, the `SecretStore` is successfully created and the `SecretMapping` didn't wait for its creation, so if you re-run the deployment, it will successfully go through now.
