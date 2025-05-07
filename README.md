@@ -35,7 +35,7 @@ roleRef:
 EOF
 ```
 
-Finally configure your this `base-env` in your Humanitec Organization:
+Finally configure this `base-env` in your Humanitec Organization:
 ```bash
 export HUMANITEC_ORG=FIXME
 
