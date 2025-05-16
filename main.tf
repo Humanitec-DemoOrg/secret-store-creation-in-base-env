@@ -1,40 +1,28 @@
 resource "humanitec_resource_definition" "base_env" {
-  driver_type = "humanitec/container"
+  driver_type = "humanitec/template"
   id          = "secret-store"
   name        = "secret-store"
   type        = "base-env"
 
   driver_inputs = {
     values_string = jsonencode({
-      job = {
-        image = "bitnami/kubectl:latest"
-        command = [
-          "/bin/sh",
-          "/home/runneruser/workspace/run.sh"
-        ]
-        shared_directory = "/home/runneruser/workspace"
-        namespace        = "humanitec-runner"
-        service_account  = "humanitec-runner"
-      }
-      cluster = {
-        account = "REDACTED"
-        cluster = {
-          name         = "REDACTED"
-          project_id   = "REDACTED"
-          zone         = "REDACTED"
-          cluster_type = "gke"
-        }
-      }
-      files = {
-        "run.sh"            = file("${path.module}/run-kubectl.sh")
-        "secret-store.yaml" = file("${path.module}/secret-store.yaml")
-      }
-    })
-    secret_refs = jsonencode({
-      cluster = {
-        agent_url = {
-          value = "$${resources['agent.default#agent'].outputs.url}"
-        }
+      "templates" = {
+        "init"      = <<END_OF_TEXT
+namespace: $${resources['k8s-namespace#k8s-namespace'].outputs.namespace}
+END_OF_TEXT
+        "manifests" = <<END_OF_TEXT
+secretstore.yaml:
+  data:
+    apiVersion: humanitec.io/v1alpha1
+    kind: SecretStore
+    metadata:
+      name: {{ .init.namespace }}
+    spec:
+      gcpsm:
+        auth: {}
+        projectID: REDACTED-AND-SHOULD-COME-FROM-A-CONFIG-PATTERN
+  location: namespace
+END_OF_TEXT
       }
     })
   }
