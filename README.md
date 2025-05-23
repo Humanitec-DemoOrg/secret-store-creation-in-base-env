@@ -1,3 +1,5 @@
+**Repo now archived, officially supported there https://developer.humanitec.com/examples/resource-definitions/template-driver/secret-store/.**
+
 # secret-store-creation-in-base-env
 
 This illustrates how a `SecretStore` in Kubernetes can be dynamically created via a `base-env` resource definition, using the `humanitec/template` driver. This requires the Humanitec Operator container version v0.21.0.
